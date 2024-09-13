@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { WebSocketServer } from 'ws';
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3010;
 const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +27,9 @@ const html = `
             // newScript.id = 'p5script';
             // newScript.innerHTML = event.data;
             // document.body.appendChild(newScript);
+            // console.log('Received: ', event.data);
             location.reload();
+
         };
         ws.onclose = () => {
             console.log('Disconnected');
@@ -90,14 +92,20 @@ wss.on('connection', (ws) => {
 
     fs.watch('./', { recursive: true }, (eventType, filename) => {
         if (filename && path.extname(filename) === '.js') {
+            if(ignorePaths.includes(filename)){
+                return;
+            }
             console.log(`The file ${filename} was changed!`);
             if (allFilesPath.includes(filename)){
                 allFilesPath.splice(allFilesPath.indexOf(filename), 1);
-                allFilesPath.push([filename, fs.statSync(filename).mtime]);
+                allFilesPath.unshift([filename, fs.statSync(filename).mtime]);
+            } else{
+                allFilesPath.unshift([filename, fs.statSync(filename).mtime]);
             }
             
             const fileData = fs.readFileSync(allFilesPath[0][0], 'utf8');
             ws.send(fileData);
+            return;
             // const scriptPath = filename;
             // fs.writeFileSync(`./index.html`, html(scriptPath));
         }

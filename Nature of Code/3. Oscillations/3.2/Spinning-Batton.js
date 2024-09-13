@@ -3,7 +3,8 @@
 
 let angle = 0;
 let aVelocity = 0;
-let aAcceleration = 0.001;
+let aAcceleration = 0.000;
+let friction = 0.99;
 
 function setup() {
     createCanvas(640, 360);
@@ -12,18 +13,24 @@ function setup() {
 function draw() {
     background(255);
 
-    let mouse = createVector(mouseX, mouseY);
-    let center = createVector(width / 2, height / 2);
-    let dir = mouse.sub(center);
-    let theta = dir.heading();
-
-    push();
     translate(width / 2, height / 2);
-    rotate(theta);
-    stroke(0);
-    strokeWeight(2);
+    rotate(angle);
+
     fill(175);
-    rectMode(CENTER);
-    rect(0, 0, 64, 8);
-    pop();
+    strokeWeight(2);
+    stroke(0);
+    line(-50, 0, 50, 0);
+    ellipse(50, 0, 8, 8);
+    ellipse(-50, 0, 8, 8);
+
+    angle += aVelocity;
+    aVelocity += aAcceleration;
+    aVelocity *= friction;
+
+    if (mouseIsPressed) {
+        aAcceleration += 0.0001;
+    }
+    else {
+        aAcceleration = 0;
+    }
 }
