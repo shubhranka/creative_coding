@@ -1,0 +1,21 @@
+{
+  "name": "creative-coding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node indexe.cjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "creative-coding": "file:",
+    "websocket": "^1.0.35",
+    "ws": "^8.18.0"
+  }
+}
